@@ -1,0 +1,60 @@
+variable "dnac" {
+  description = "Login information"
+  type        = map
+  default     = {
+    username = "admin"
+    password = "C1sco12345"
+    url      = "https://198.18.129.100"
+  }
+}
+
+
+variable "sites" {
+  description = "List of all Sites"
+  type        = list(string)
+  
+  default     = [
+    {% for site in sites -%}
+    {% if loop.first -%}
+    "{{site}}"
+    {%- else -%}
+     ,"{{site}}"
+     {%- endif %}
+    {%- endfor %}
+  ]
+}
+
+
+variable "building" {
+  description = "all buildings with longitute, latitude and parent"
+  type = list(map(string))
+
+  default = [
+    {% for building in buildings %}
+    {
+      name = "{{building.name}}"
+      long = "50.0"
+      lat = "50.0"
+      parent = "Global/{{building.parent}}"
+
+    },
+    {% endfor %}
+  ]
+}
+
+
+variable "ip_pools" {
+  description = "all IP Pools with dhcp, dns, gateway, pool, subnet, name and site"
+  type = list(map(string))
+
+  default = [
+    {% for ip_pool in ip_pools %}
+    {
+      name = "{{ip_pool.name}}"
+      gw = "{{ip_pool.gw}}"
+      subnet = "{{ip_pool.subnet}}"
+      parent = "{{ip_pool.parent}}"
+    },
+    {% endfor %}
+  ]
+}
